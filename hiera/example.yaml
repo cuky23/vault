@@ -1,0 +1,5 @@
+#example.yaml
+vault::vault:active: true
+# all varibles can be set in yaml using the normal class::subclass:key: value 
+# bug with CA certs needing to be installed in legacy as the new system doesnt update this.
+/etc/pki/tls/certs/ca-bundle.crt
