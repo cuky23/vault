@@ -18,8 +18,12 @@ Should load a nice GUI showings services in dc1
 
 Out of scope :: using vault.
 
-vault init , first run will display five keys and a Root Token.  make a note of them, you will need them to unseal
+```
+vault init 
+```
+First run will display five keys and a Root Token.  make a note of them, you will need them to unseal
 if vault is sealed , you need to feed it three of the five keys it displayed when you ran vault init.
+```
 vault unseal <key1>
 Key (will be hidden): 
 Sealed: true
@@ -43,4 +47,4 @@ Key Shares: 5
 Key Threshold: 3
 Unseal Progress: 0
 Unseal Nonce: 
-
+```
