@@ -1,14 +1,17 @@
 #puppet module to install vault.io with a small amount of consul.io
 
+Todo : vault start up script isnt working 100%  /etc/init/vault
+
 I undertook writing it based on the good work from here 
 "https://dunne.io/vault-and-self-signed-ssl-certificates#disqus_thread"
 
-With bits from https://github.com/samdunne/consul-centos-packer/tree/master/scripts/consul, as why revent the wheel.  the init script for el6 works fine on el7
+With bits from https://github.com/samdunne/consul-centos-packer/tree/master/scripts/consul, as why reinvent the wheel.  the init script for consul el6 works fine on el7, only needed minor adjustment.
 
-This puppet module will install a Self Sign CA for vault and configure linux to use it.  Tested on Centos7.3
-Seems to be a bug aroung the CA being seen on Centos7.3 I have put a helpper script to add the CERT via cat if it doesnt exist. /tmp/update_ca.sh
+This puppet module will install a Self Sign CA for vault and configure el7 to use it.  Tested on Centos7.3  
+Seems to be a bug aroung the CA being seen on Centos7.3  
 
-Todo : vault init script isnt working 100% 
+I have used a script to add the CERT if it doesnt exist. /tmp/update_ca.sh, this uses the older el5 method( cat it to the end of /etc/pki/tls/certs/ca-bundle.crt
+
 
 checking things worked and vault/consul are available.
 
