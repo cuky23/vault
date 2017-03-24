@@ -1,9 +1,0 @@
-my_message: 'Hello, World! hiera.yml working'
-base::debug: false  
-base::domain: demo.co.uk
-base::platform: demo
-base::timezone: Europe/London
-
-vault::vault:active: true
-
-
