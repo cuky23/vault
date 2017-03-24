@@ -1,0 +1,4 @@
+# vagrant runs this on a host sort of
+
+FACTER_platform=demo ; export FACTER_platform=demo
+puppet apply --parser future --modulepath modules:/etc/puppet/modules --hiera_config=hiera.yaml --manifestdir manifests manifests/default.pp

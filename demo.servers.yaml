@@ -1,0 +1,9 @@
+- name: demonas01
+  hostname: demonas01
+  box: tknerr/managed-server-dummy
+  user: root
+  keypath: ~/.ssh/demo.id_rsa
+  bootstrap: el7script
+  platform: demo
+
+

@@ -1,0 +1,32 @@
+#<%= @ca_trust_dir %>/<%= @ca_trust_conf %>
+[ ca ]
+default_ca = <%= @ca_cn %>
+[ <%= @ca_cn %> ]
+new_certs_dir = /tmp
+unique_subject = no
+certificate = <%= @certs_dir %>/<%= @ca_crt %>
+database = <%= @certs_dir %>/certindex
+private_key = <%= @private_dir %>/<%= @ca_key %>
+serial = <%= @certs_dir %>/serialfile
+default_days = <%= @default_days %>
+default_md = <%= @default_md %>
+policy = <%= @ca_cn %>_policy
+x509_extensions = <%= @ca_cn %>_extensions
+copy_extensions = copy
+
+[ <%= @ca_cn %>_policy ]
+commonName = supplied
+stateOrProvinceName = optional
+countryName = supplied
+emailAddress = optional
+organizationName = supplied
+organizationalUnitName = optional
+
+[ <%= @ca_cn %>_extensions ]
+basicConstraints = CA:false
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always
+keyUsage = digitalSignature,keyEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = <%= @subjectaltname %>
+

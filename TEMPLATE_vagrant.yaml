@@ -1,0 +1,16 @@
+sites:
+  demosite1:
+    siteroot:
+      src: '/Users/demo/www/bcsawiki'
+      dst: '/var/www/demosite1'
+      use_nfs: 0
+  demosite2:
+    siteroot:
+      src: '/Users/demo/www/demosite2'
+      dst: '/var/www/demosite2'
+      use_nfs: 0
+  demosite3:
+    siteroot:
+      src: '/Users/demo/www/demosite3'
+      dst: '/var/www/demosite3'
+      use_nfs: 0

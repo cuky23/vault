@@ -1,0 +1,49 @@
+---
+:backends:
+  - yaml
+
+:hierarchy:
+  - "nodes/%{::hostname}"
+  - "platform/%{::platform}/nodes/%{::hostname}/local"
+  - "platform/%{::platform}/nodes/%{::hostname}/volumes"
+  - "platform/%{::platform}/nodes/%{::hostname}/gitprojects"
+  - "platform/%{::platform}/nodes/%{::hostname}/haservices"
+  - "platform/%{::platform}/nodes/%{::hostname}/webservices"
+  - "platform/%{::platform}/nodes/%{::hostname}/dbservices"
+  - "platform/%{::platform}/nodes/%{::hostname}/mailservices"
+  - "platform/%{::platform}/nodes/%{::hostname}/gitprojects"
+  - "platform/%{::platform}/nodes/%{::hostname}/httpd_custom_fragments"
+  - "platform/%{::platform}/nodes/%{::hostname}/httpd_vhostconfig"
+  - "platform/%{::platform}/nodes/%{::hostname}/httpd_vhostconfig_staging"
+  - "platform/%{::platform}/nodes/%{::hostname}/nginx_custom_fragments"
+  - "platform/%{::platform}/nodes/%{::hostname}/nginx_serverblock"
+  - "platform/%{::platform}/nodes/%{::hostname}/nginx_serverblock_staging"
+  - "platform/%{::platform}/nodes/%{::hostname}/nginx_location_defaults"
+  - "platform/%{::platform}/nodes/%{::hostname}/nginx_upstream"
+  - "platform/%{::platform}/nodes/%{::hostname}/phpfpm_pool"
+  - "platform/%{::platform}/nodes/%{::hostname}"
+  - "platform/%{::platform}/keys"
+  - "platform/%{::platform}/users"
+  - "platform/%{::platform}/volumes"
+  - "platform/%{::platform}/httpd_custom_fragments"
+  - "platform/%{::platform}/httpd_vhostconfig"
+  - "platform/%{::platform}/httpd_vhostconfig_staging"
+  - "platform/%{::platform}/nginx_custom_fragments"
+  - "platform/%{::platform}/nginx_serverblock"
+  - "platform/%{::platform}/nginx_serverblock_staging"
+  - "platform/%{::platform}/nginx_location_defaults"
+  - "platform/%{::platform}/nginx_upstream"
+  - "platform/%{::platform}/phpfpm_pool"
+  - "platform/%{::platform}/local"
+  - "platform/%{::platform}/haservices"
+  - "platform/%{::platform}/webservices"
+  - "platform/%{::platform}/dbservices"
+  - "platform/%{::platform}/mailservices"
+  - "platform/%{::platform}/gitprojects"
+  - "common"
+:yaml:
+  :datadir: '/vagrant/hiera'
+
+# options are native, deep, deeper
+:merge_behavior: native
+

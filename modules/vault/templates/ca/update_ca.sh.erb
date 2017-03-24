@@ -1,0 +1,16 @@
+#!/bin/bash
+# script to add Custom rootCA only if it doesnt exist
+cd /etc/pki/tls/certs
+#remove comments so you can compare just the cert.  This way grep can work and give $? correctly
+cat rootCA.crt |grep -v CERTIFICATE >/tmp/root.crt
+cat ca-bundle.crt |grep -aof /tmp/root.crt >/dev/null
+err=$?
+if [[ $err -ne 0 ]]
+then
+	echo "adding CERT as it is missing!"
+	openssl x509 -in rootCA.crt -text >>./ca-bundle.crt
+	rm /tmp/root.crt
+else
+	echo "CERT installed"
+fi
+

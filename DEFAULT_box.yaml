@@ -1,0 +1,8 @@
+# OS to load
+- name: Centos6.6
+  url: c66.box
+  hostname: dev.local
+  vmname: dev-vm
+  bootstrap: el6script
+  puppeton: true
+

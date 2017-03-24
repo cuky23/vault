@@ -1,0 +1,17 @@
+#!/bin/bash
+if [[ "x$1" = "x" ]]
+then 
+	exit 1
+fi
+VAGRANT_DEFAULT_PROVIDER=managed ; export VAGRANT_DEFAULT_PROVIDER
+
+VAGRANT_PLATFORM=${1} ; export VAGRANT_PLATFORM
+
+if [[ -f ${VAGRANT_PLATFORM}.servers.yaml ]]
+then
+	shift
+	vagrant $*
+else 
+	unset VAGRANT_PLATFORM
+	vagrant $*
+fi

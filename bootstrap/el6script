@@ -1,0 +1,117 @@
+#!/bin/bash
+ip a
+cd /root
+#if [[ -f /root/epel-release-6-5.noarch.rpm ]] ; then 
+#    echo "we already downloaded epel-release-6-5.noarch.rpm"
+#else 
+#    wget http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/epel-release-6-5.noarch.rpm
+#fi
+#if [[ -f /root/ius-release-1.0-14.ius.centos6.noarch.rpm ]] ; then 
+#    echo "we already downloaded ius-release-1.0-14.ius.centos6.noarch.rpm"
+#else
+#    wget http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-14.ius.centos6.noarch.rpm
+#fi
+#rpm -ivh ius-release-1.0-14.ius.centos6.noarch.rpm epel-release-6-5.noarch.rpm
+
+
+rpmel6='http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm'
+PUPPETSITE="http://yum.puppetlabs.com"
+PUPPETRELEASE=puppetlabs-release-el-6.noarch.rpm
+echo "START puppet el6script ${rpmel6}"
+
+sudo yum install -y wget 
+
+rpm -qa |grep rsync
+if [[ $? -eq 0 ]]
+then 
+	echo "we got an rsync"
+else
+	sudo yum install -y rsync --disablerepo="*" --enablerepo="base"
+fi 
+if [ "$EUID" -ne "0" ] ; then
+        echo "Script must be run as root." >&2
+        #exit 1
+fi
+
+if which puppet > /dev/null ; then
+        echo "Puppet is already installed"
+        #exit 0
+fi
+if [[ -f  /tmp/$PUPPETRELEASE ]]
+then
+	echo "already got  /tmp/$PUPPETRELEASE"
+	cd /tmp ;  
+	#find . -name "$PUPPETRELEASE" -mtime +5 -ls |grep "$PUPPETRELEASE"
+	find . -name "$PUPPETRELEASE" -ls |grep "$PUPPETRELEASE"
+	if [[ $? -eq 0 ]]
+	then 
+		cd /tmp/ ; rm -fr puppetlabs-release*.rpm
+		
+		wget -qO /tmp/$PUPPETRELEASE ${PUPPETSITE}/$PUPPETRELEASE
+	fi
+else
+	wget -qO /tmp/$PUPPETRELEASE  ${PUPPETSITE}/$PUPPETRELEASE
+fi
+sudo yum install -y /tmp/$PUPPETRELEASE
+echo "Installing puppet..."
+sudo yum install -y puppet
+sudo yum update -y puppet
+echo "Activating service..."
+sudo puppet --version 
+sudo puppet resource service puppet ensure=running enable=true
+sudo setenforce permissive
+sudo mkdir -p /etc/puppet/modules
+#puppet module install puppetlabs/apache;
+sudo puppet module install puppetlabs-stdlib
+sudo puppet module install puppetlabs-concat 
+#sudo puppet module install saz-sudo 
+#sudo puppet module install saz-sudo 
+sudo puppet module list |grep -- 'saz-sudo' >/dev/null
+if [[ $? -eq 0 ]]
+then 
+	sudo puppet module uninstall saz-sudo 
+fi
+#grep  -v 'ordering = manifest' /etc/puppet/puppet.conf >/tmp/puppet.conf;
+#echo 'ordering = manifest' >>/tmp/puppet.conf ;
+#cp /tmp/puppet.conf  /etc/puppet/puppet.conf 
+sudo service puppet restart
+#WEB TRAFFIC
+cat /etc/sysconfig/iptables |grep -- 'dports 80,443 -j ACCEPT'
+if [[ $? -ne 0 ]]
+then 
+		iptables -I INPUT  -p tcp -m multiport --dports 80,443 -j ACCEPT
+		service iptables save
+		service iptables reload
+fi
+
+#network helper for lazy vagrants
+NET_RESTART="false"
+for ifdev in `ls  /etc/sysconfig/network-scripts/ifcfg-* |grep -v -- 'ifcfg-lo'`
+do
+    cat $ifdev  |grep IPADDR 1>/dev/null 2>&1
+    if [[ $? -eq 0 ]] ; then 
+        cat $ifdev | grep -- "ONBOOT=yes"
+        if [[ $? -eq 0 ]] ; then 
+            IP=`cat $ifdev  |grep IPADDR | awk -F '=' '{print$2}'`
+            echo $IP $ifdev
+            if [[ -z $IP ]] ; then 
+                echo "Nothing to do with $IPADDR"
+            else
+                ip addr show  |/bin/grep -- "$IP"
+                if [[ $? -ne 0 ]] ; then 
+                    NET_RESTART="true"
+                else
+                    echo "jog-on networking looks ok"
+                fi
+            fi
+        fi
+    fi
+done
+if [[ "$NET_RESTART" = "true" ]]
+then
+    service network restart
+fi
+
+ip a
+
+echo "FIN! puppet el6script ${rpmel6}"

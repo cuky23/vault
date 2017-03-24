@@ -71,6 +71,12 @@ class vault::ca (
 			command => "mkdir -p ${certs_dir}"	
 		}
 		->
+		exec{"update-ca-trust_enable_final_pass":
+			path => ["/bin","/sbin","/usr/sbin","/usr/bin/","/usr/local/sbin","/usr/local/bin"],
+			command => "sudo update-ca-trust enable"	
+
+		}
+		->
 		file {"${certs_dir}/serialfile":
 			content => "$serialfile_counter"
 		}
