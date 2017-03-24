@@ -14,12 +14,7 @@ else
 end	
 
 VAGRANTFILE_API_VERSION = "2"
-Vagrant.require_version ">= 1.7.2"
-
-#@ui.warn "WARNING! The new version needs this plugin."
-#@ui.warn "vagrant plugin install vagrant-host-shell"
-
-#@ui.warn "vagrant plugin  install vagrant-tagprovision"
+#Vagrant.require_version ">= 1.7.2"
 
 #check for the env VAGRANT_PLATFORM
 if ENV.has_key?('VAGRANT_PLATFORM') 
@@ -70,19 +65,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			end
 			if  servers.has_key?("platform")
 				platform ="#{servers["platform"]}"
-			#else
-			#	platform = "oat" #can be set above as global from shell
 			end
-			#file magic deliver eyaml keys
-			@ui.info "Sending KEYS for eyaml"
-			#if eyaml enabled
-			if "#{bootstrap}" =~ /eyaml/
-				config.vm.provision "shell", inline: "mkdir /vagrant/keystore ; chmod 0500 /vagrant/keystore"
-				config.vm.provision "file", source: "./keys/#{platform}.private_key.pkcs7.pem", destination: "/vagrant/keystore/private_key.pkcs7.pem"
-				config.vm.provision "file", source: "./keys/#{platform}.public_key.pkcs7.pem", destination: "/vagrant/keystore/public_key.pkcs7.pem"
-				config.vm.provision "shell", inline: "chmod 0400 /vagrant/keystore/*.pem"
-			end
-			#endif fir eyaml
 			#file magic to push bootstrap/el6script at host then run it
 			config.vm.provision "file", source: "./bootstrap/#{bootstrap}", destination: "/tmp/#{bootstrap}"
 			@ui.info "Using BOOTSTRAP #{bootstrap}"
@@ -96,18 +79,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 				puppet.facter = { "platform" => "#{platform}" }
 			end
 			@ui.info "platform is set as #{platform}"
-			#tag provisioning
-			#config.tagprovision.enabled = true
-			#config.tagprovision.log_provision = true
-			#config.tagprovision.tag_provision = false
-			#config.tagprovision.push_tag = false
 			config.vm.provision "shell", inline: "ip a | grep inet | grep -e eth -e br"
-			#file magic remove eyaml keys
-			if "#{bootstrap}" =~ /eyaml/
-				config.vm.provision "shell", inline: "rm -fr /vagrant/keystore/*.pem"
-				config.vm.provision "shell", inline: "ls -l /vagrant/keystore"
-			end 
-			#endif fir eyaml
 		end
 	end 
 end
