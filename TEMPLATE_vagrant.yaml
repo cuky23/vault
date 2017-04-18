@@ -1,7 +1,7 @@
 sites:
   demosite1:
     siteroot:
-      src: '/Users/demo/www/bcsawiki'
+      src: '/Users/demo/www/demosite1'
       dst: '/var/www/demosite1'
       use_nfs: 0
   demosite2:
